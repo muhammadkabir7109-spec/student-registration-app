@@ -107,8 +107,20 @@ const API_URL = "https://student-backend-5262.onrender.com/api/students";
     }
   }
 
-  submitButton.addEventListener("click", insertData);
-  
-  // Initialize table data immediately when app page boots up
-  window.addEventListener("DOMContentLoaded", loadStudents);
+  // Move your element selector down here so it looks for the button *after* the DOM is ready
+  window.addEventListener("DOMContentLoaded", () => {
+    // 1. Grab your elements safely now that the page is fully built
+    const submitButton = document.getElementById("submidButton");
+    
+    // 2. Attach the click listener safely
+    if (submitButton) {
+      submitButton.addEventListener("click", insertData);
+    } else {
+      console.error("Could not find element with ID 'submidButton' inside your HTML layout.");
+    }
+
+    // 3. Load your initial data rows
+    loadStudents();
+  });
+</script>
 </script>
