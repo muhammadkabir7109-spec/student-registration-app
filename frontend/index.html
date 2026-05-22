@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Form</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    /* FORM STYLING */
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-top: 10px;
+    }
+
+    #submidButton {
+      width: 100%;
+      margin-top: 15px;
+      padding: 10px;
+      border: none;
+      background: #007BFF;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #submidButton:hover {
+      background: #0056b3;
+    }
+
+    /* TABLE STYLING */
+    table {
+      width: 90%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    caption {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e6f2ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Student Registration Form</h2>
+
+  <form action="https://x.com" id="schoolForm" method="POST">
+    <label>Name</label>
+    <input id="fullname" type="text" name="fullname" />
+
+    <label>School</label>
+    <input id="school" type="text" name="school" />
+
+    <label>Level</label>
+    <input id="level" type="text" name="level" />
+
+    <label>Email</label>
+    <input id="email" type="email" name="email" />
+
+    <label>Password</label>
+    <input id="password" type="password" name="password" />
+
+    <label>
+      <input id="terms" type="checkbox" name="terms" />
+      Accept T&C
+    </label>
+
+    <label>Payment Method</label>
+    <label><input id="cashPayment" type="radio" name="paymentMethod" value="Cash" /> Cash</label>
+    <label><input id="cardPayment" type="radio" name="paymentMethod" value="Card" /> Card</label>
+
+    <input id="submidButton" type="button" value="Insert" />
+  </form>
+
+  <table id="schoolTable">
+    <caption>List of CSC300L Students</caption>
+
+    <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>School</th>
+      <th>Level</th>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Terms</th>
+      <th>Payment Method</th>
+    </tr>
+  </table>
+
+  <script>
+    let id = 1;
+    let submitButton = document.getElementById("submidButton");
+
+    function insertData() {
+      const schoolForm = document.getElementById("schoolForm");
+
+      const fullname = schoolForm.elements.fullname;
+      const school = schoolForm.elements.school;
+      const level = schoolForm.elements.level;
+      const email = schoolForm.elements.email;
+      const password = schoolForm.elements.password;
+      const terms = schoolForm.elements.terms;
+      const paymentMethod = schoolForm.elements.paymentMethod;
+
+      let row = schoolTable.insertRow();
+
+      let cell1 = row.insertCell(0);
+      let cell2 = row.insertCell(1);
+      let cell3 = row.insertCell(2);
+      let cell4 = row.insertCell(3);
+      let cell5 = row.insertCell(4);
+      let cell6 = row.insertCell(5);
+      let cell7 = row.insertCell(6);
+      let cell8 = row.insertCell(7);
+
+      cell1.innerHTML = id;
+      cell2.innerHTML = fullname.value;
+      cell3.innerHTML = school.value;
+      cell4.innerHTML = level.value;
+      cell5.innerHTML = email.value;
+      cell6.innerHTML = password.value;
+      cell7.innerHTML = terms.checked;
+
+      // FIX for radio button
+      let selectedPayment = "";
+      for (let i = 0; i < paymentMethod.length; i++) {
+        if (paymentMethod[i].checked) {
+          selectedPayment = paymentMethod[i].value;
+        }
+      }
+      cell8.innerHTML = selectedPayment;
+
+      id++;
+
+      fullname.value = "";
+      school.value = "";
+      level.value = "";
+      email.value = "";
+      password.value = "";
+    }
+
+    submitButton.addEventListener("click", insertData);
+  </script>
+
+</body>
+
+</html>
