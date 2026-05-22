@@ -18,7 +18,11 @@ router.post('/', async (req, res) => {
 // @route   GET /api/students
 router.get('/', async (req, res) => {
     try {
-        const students = await studentRoutes = await Student.find();
+        // CHANGE THIS:
+        // const students = await studentRoutes = await Student.find();
+
+        // TO THIS:
+        const students = await Student.find();
         res.status(200).json(students);
     } catch (error) {
         res.status(500).json({ message: error.message });
