@@ -4,25 +4,25 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db.js');
 const studentRoutes = require('./routes/studentRoutes');
 
-// Load environment variables
+// Load configurations
 dotenv.config();
 
-// Connect to Database
+// Access MongoDB Server
 connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors()); // Enables cross-origin requests from your frontend link
-app.use(express.json()); // Parses incoming JSON payloads
+// Global Middleware Configs
+app.use(cors());
+app.use(express.json());
 
-// Routes
+// Main App API Routes
 app.use('/api/students', studentRoutes);
 
-// Fallback Route
+// Fallback Route Endpoint Verification
 app.get('/', (req, res) => {
     res.json({ message: "Student API is running smoothly..." });
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server executing safely on port ${PORT}`));

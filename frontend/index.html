@@ -1,126 +1,273 @@
-<script>
-  // CHANGE THIS URL to your actual backend URL after deploying to Render
-  // Change this line to your live backend URL + /api/students
-const API_URL = "https://student-backend-5262.onrender.com/api/students"; 
-  
-  let submitButton = document.getElementById("submidButton");
-  const schoolTable = document.getElementById("schoolTable");
+ <!DOCTYPE html>
+<html lang="en">
 
-  // Helper function to dynamically add rows to your table UI
-  function addRowToTable(index, student) {
-    let row = schoolTable.insertRow();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Form</title>
 
-    let cell1 = row.insertCell(0);
-    let cell2 = row.insertCell(1);
-    let cell3 = row.insertCell(2);
-    let cell4 = row.insertCell(3);
-    let cell5 = row.insertCell(4);
-    let cell6 = row.insertCell(5);
-    let cell7 = row.insertCell(6);
-    let cell8 = row.insertCell(7);
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+    }
 
-    cell1.innerHTML = index;
-    cell2.innerHTML = student.fullname;
-    cell3.innerHTML = student.school;
-    cell4.innerHTML = student.level;
-    cell5.innerHTML = student.email;
-    cell6.innerHTML = student.password;
-    cell7.innerHTML = student.terms ? "True" : "False";
-    cell8.innerHTML = student.paymentMethod;
-  }
+    h2 {
+      text-align: center;
+    }
 
-  // 1. FETCH & DISPLAY DATA ON LOAD
-  async function loadStudents() {
-    try {
-      const response = await fetch(API_URL);
-      const students = await response.json();
+    /* FORM STYLING */
+    form {
+      max-width: 400px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-top: 10px;
+    }
+
+    #submidButton {
+      width: 100%;
+      margin-top: 15px;
+      padding: 10px;
+      border: none;
+      background: #007BFF;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #submidButton:hover {
+      background: #0056b3;
+    }
+
+    /* TABLE STYLING */
+    table {
+      width: 90%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    caption {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #e6f2ff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Student Registration Form</h2>
+
+  <form id="schoolForm">
+    <label>Name</label>
+    <input id="fullname" type="text" name="fullname" />
+
+    <label>School</label>
+    <input id="school" type="text" name="school" />
+
+    <label>Level</label>
+    <input id="level" type="text" name="level" />
+
+    <label>Email</label>
+    <input id="email" type="email" name="email" />
+
+    <label>Password</label>
+    <input id="password" type="password" name="password" />
+
+    <label>
+      <input id="terms" type="checkbox" name="terms" />
+      Accept T&C
+    </label>
+
+    <label>Payment Method</label>
+    <label><input id="cashPayment" type="radio" name="paymentMethod" value="Cash" /> Cash</label>
+    <label><input id="cardPayment" type="radio" name="paymentMethod" value="Card" /> Card</label>
+
+    <input id="submidButton" type="button" value="Insert" />
+  </form>
+
+  <table id="schoolTable">
+    <caption>List of CSC300L Students</caption>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>School</th>
+        <th>Level</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Terms</th>
+        <th>Payment Method</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // ⚠️ REPLACE THIS URL WITH YOUR LIVE RENDER BACKEND WEB SERVICE LINK IF DEPLOYED
+    const API_URL = "https://student-backend-5262.onrender.com/api/students";
+
+    // Helper function to dynamically add data rows into the HTML table template
+    function addRowToTable(index, student) {
+      const schoolTable = document.getElementById("schoolTable");
+      if (!schoolTable) return;
       
-      // Clear existing dynamic rows (leaving the header)
-      while(schoolTable.rows.length > 1) {
-        schoolTable.deleteRow(1);
+      let row = schoolTable.insertRow();
+
+      let cell1 = row.insertCell(0);
+      let cell2 = row.insertCell(1);
+      let cell3 = row.insertCell(2);
+      let cell4 = row.insertCell(3);
+      let cell5 = row.insertCell(4);
+      let cell6 = row.insertCell(5);
+      let cell7 = row.insertCell(6);
+      let cell8 = row.insertCell(7);
+
+      cell1.innerHTML = index;
+      cell2.innerHTML = student.fullname || '';
+      cell3.innerHTML = student.school || '';
+      cell4.innerHTML = student.level || '';
+      cell5.innerHTML = student.email || '';
+      cell6.innerHTML = student.password || '';
+      cell7.innerHTML = student.terms ? "True" : "False";
+      cell8.innerHTML = student.paymentMethod || '';
+    }
+
+    // 1. GET DATA FROM CLOUD DATABASE
+    async function loadStudents() {
+      const schoolTable = document.getElementById("schoolTable");
+      if (!schoolTable) return;
+
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Server responded with an internal error status.");
+        
+        const students = await response.json();
+        
+        // Safely clear out any old dynamic rows while preserving the header row template
+        while (schoolTable.rows.length > 1) {
+          schoolTable.deleteRow(1);
+        }
+
+        // Loop and build out individual visual table database records 
+        students.forEach((student, index) => {
+          addRowToTable(index + 1, student);
+        });
+      } catch (error) {
+        console.error("Error loading student profiles:", error);
+      }
+    }
+
+    // 2. TRANSMIT NEW STUDENT RECORD TO CLOUD DATABASE
+    async function insertData() {
+      const schoolForm = document.getElementById("schoolForm");
+      if (!schoolForm) return;
+
+      const fullname = schoolForm.elements.fullname.value;
+      const school = schoolForm.elements.school.value;
+      const level = schoolForm.elements.level.value;
+      const email = schoolForm.elements.email.value;
+      const password = schoolForm.elements.password.value;
+      const terms = schoolForm.elements.terms.checked;
+      const paymentMethodElements = schoolForm.elements.paymentMethod;
+
+      let selectedPayment = "";
+      if (paymentMethodElements) {
+        if (paymentMethodElements.length) {
+          for (let i = 0; i < paymentMethodElements.length; i++) {
+            if (paymentMethodElements[i].checked) {
+              selectedPayment = paymentMethodElements[i].value;
+            }
+          }
+        } else if (paymentMethodElements.checked) {
+          selectedPayment = paymentMethodElements.value;
+        }
       }
 
-      // Populate table with database records
-      students.forEach((student, index) => {
-        addRowToTable(index + 1, student);
-      });
-    } catch (error) {
-      console.error("Error loading student profiles:", error);
-    }
-  }
+      if (!fullname || !email || !selectedPayment) {
+        alert("Please complete the Name, Email, and Payment fields!");
+        return;
+      }
 
-  // 2. SUBMIT DATA TO BACKEND
-  async function insertData() {
-    const schoolForm = document.getElementById("schoolForm");
+      const payload = { fullname, school, level, email, password, terms, paymentMethod: selectedPayment };
 
-    const fullname = schoolForm.elements.fullname.value;
-    const school = schoolForm.elements.school.value;
-    const level = schoolForm.elements.level.value;
-    const email = schoolForm.elements.email.value;
-    const password = schoolForm.elements.password.value;
-    const terms = schoolForm.elements.terms.checked;
-    const paymentMethodElements = schoolForm.elements.paymentMethod;
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-    let selectedPayment = "";
-    for (let i = 0; i < paymentMethodElements.length; i++) {
-      if (paymentMethodElements[i].checked) {
-        selectedPayment = paymentMethodElements[i].value;
+        if (response.ok) {
+          loadStudents(); // Dynamic visual table refresh
+          schoolForm.reset(); // Clear input elements text contents
+        } else {
+          const errData = await response.json();
+          alert("Submission failed: " + errData.message);
+        }
+      } catch (error) {
+        console.error("Network connection error:", error);
       }
     }
 
-    // Basic Validation Stop
-    if(!fullname || !email || !selectedPayment) {
-      alert("Please fill out the required fields!");
-      return;
-    }
-
-    const payload = {
-      fullname,
-      school,
-      level,
-      email,
-      password,
-      terms,
-      paymentMethod: selectedPayment
-    };
-
-    try {
-      // Send data to backend API
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (response.ok) {
-        // Refresh table visually & clear form inputs
-        loadStudents();
-        schoolForm.reset();
+    // 3. SECURE ADDEVENTLISTENER MOUNTING UPON DOM INITIALIZATION
+    window.addEventListener("DOMContentLoaded", () => {
+      const submitButton = document.getElementById("submidButton");
+      if (submitButton) {
+        submitButton.addEventListener("click", insertData);
       } else {
-        const errData = await response.json();
-        alert("Submission failed: " + errData.message);
+        console.error("Could not find element with ID 'submidButton' inside your HTML layout.");
       }
-    } catch (error) {
-      console.error("Network connection error:", error);
-    }
-  }
-
-  // Move your element selector down here so it looks for the button *after* the DOM is ready
-  window.addEventListener("DOMContentLoaded", () => {
-    // 1. Grab your elements safely now that the page is fully built
-    const submitButton = document.getElementById("submidButton");
-    
-    // 2. Attach the click listener safely
-    if (submitButton) {
-      submitButton.addEventListener("click", insertData);
-    } else {
-      console.error("Could not find element with ID 'submidButton' inside your HTML layout.");
-    }
-
-    // 3. Load your initial data rows
-    loadStudents();
-  });
-</script>
-</script>
+      loadStudents();
+    });
+  </script>
+</body>
+</html>

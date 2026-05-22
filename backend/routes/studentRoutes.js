@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const student = require('../models/students');
+const Student = require('../models/students'); // Verified completely lowercase for Linux systems
 
 // @desc    Create a new student record
 // @route   POST /api/students
@@ -18,11 +18,7 @@ router.post('/', async (req, res) => {
 // @route   GET /api/students
 router.get('/', async (req, res) => {
     try {
-        // CHANGE THIS:
-        // const students = await studentRoutes = await Student.find();
-
-        // TO THIS:
-        const students = await Student.find();
+        const students = await Student.find(); // Cleared syntax errors assignment typo
         res.status(200).json(students);
     } catch (error) {
         res.status(500).json({ message: error.message });
