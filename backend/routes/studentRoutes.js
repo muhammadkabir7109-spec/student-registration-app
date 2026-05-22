@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const student = require('../models/Student');
+const student = require('../models/student');
 
 // @desc    Create a new student record
 // @route   POST /api/students
